@@ -1,0 +1,50 @@
+version: '3'
+services:
+  backend:
+    build: ./backend
+    ports:
+      - 3000:80
+    networks:
+      - docker-complete-network
+    env_file:
+      - ./backend/docker.env
+    volumes:
+      - type: bind
+        source: ./backend
+        target: /app
+      - type: volume
+        target: /app/node_modules
+    # depends_on:
+    #   - mongodb
+
+  frontend:
+    build: ./frontend
+    ports:
+      - 80:3000
+    networks:
+      - docker-complete-network
+    env_file:
+      - ./frontend/docker.env
+    volumes:
+      - type: bind
+        source: ./frontend/src
+        target: /app/src
+      - type: volume
+        target: /app/node_modules
+  
+  # mongodb:
+  #   image: mongo
+  #   networks:
+  #     - docker-complete-network
+  #   volumes:
+  #     - type: volume
+  #       source: 'data'
+  #       target: '/data/db'
+  #   env_file:
+  #     - ./env/mongodb.env
+
+networks:
+  docker-complete-network:
+
+volumes:
+  data:
